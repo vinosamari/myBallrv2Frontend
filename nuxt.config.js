@@ -39,7 +39,8 @@ export default {
     "@nuxtjs/axios",
     // https://go.nuxtjs.dev/pwa
     "@nuxtjs/pwa",
-    "@nuxtjs/proxy"
+    "@nuxtjs/proxy",
+    "@nuxtjs/strapi"
   ],
   googleFonts: {
     families: {
@@ -54,7 +55,9 @@ export default {
   },
   proxy: {
     "/api": {
-      target: "https://balldontlie.io/api/v1"
+      // target: "https://balldontlie.io/api/v1",
+      target: "https://api-nba-v1.p.rapidapi.com",
+      pathRewrite: { "^/api": "" }
     }
   },
 
