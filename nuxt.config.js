@@ -9,7 +9,7 @@ export default {
         hid: "description",
         name: "description",
         content:
-          "Get the most recent NBA stats on your favorite teams and players frequently. Works both online and offline"
+          "Get the most recent NBA stats on your favorite teams and players frequently. Works online and offline"
       },
       { name: "format-detection", content: "telephone=no" }
     ],
@@ -20,8 +20,21 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [],
+  plugins: [
+    { src: "@/plugins/aos", mode: "client" },
+    { src: "@/plugins/coverflow", mode: "client" }
+  ],
 
+  purgeCSS: {
+    whitelist: [
+      "aos-init",
+      "aos-animate",
+      "data-aos-delay",
+      "data-aos-duration",
+      "fade-up",
+      "zoom-in"
+    ]
+  },
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
@@ -30,7 +43,8 @@ export default {
     // https://go.nuxtjs.dev/tailwindcss
     "@nuxtjs/tailwindcss",
     "nuxt-vite",
-    "@nuxtjs/google-fonts"
+    "@nuxtjs/google-fonts",
+    "nuxt-animejs"
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
@@ -45,19 +59,63 @@ export default {
   googleFonts: {
     families: {
       Poppins: true,
-      "Open Sans": true
-    }
+      "Open Sans": true,
+      "Nova Mono": true
+    },
+    prefetch: true,
+    preload: true,
+    display: "swap"
+  },
+  loadingIndicator: {
+    name: "folding-cube",
+    color: "#EB5A77",
+    background: "#1d4ed8",
+    continuous: true
   },
 
+  pageTransition: {
+    name: "page",
+    mode: "out-in",
+    css: false,
+
+    beforeEnter(el) {
+      this.$anime.set(el, {
+        opacity: 0
+      });
+    },
+
+    enter(el, done) {
+      this.$anime({
+        targets: el,
+        opacity: [0, 1],
+        duration: 300,
+        easing: "easeInOutSine",
+        complete: done
+      });
+    },
+
+    leave(el, done) {
+      this.$anime({
+        targets: el,
+        opacity: [1, 0],
+        duration: 300,
+        easing: "easeInOutSine",
+        complete: done
+      });
+    }
+  },
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     proxy: true
   },
   proxy: {
     "/api": {
-      // target: "https://balldontlie.io/api/v1",
       target: "https://api-nba-v1.p.rapidapi.com",
       pathRewrite: { "^/api": "" }
+    },
+    "/api2": {
+      target: "https://balldontlie.io/api/v1",
+      pathRewrite: { "^/api2": "" }
     }
   },
 

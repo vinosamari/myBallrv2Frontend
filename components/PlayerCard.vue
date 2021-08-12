@@ -10,10 +10,10 @@ export default {
   props: ["player"],
   computed: {
     fullName() {
-      return `${this.player.first_name} ${this.player.last_name}`;
+      return `${this.player.firstName} ${this.player.lastName}`;
     },
     playerPosition() {
-      return this.player.position ? this.player.position : "-";
+      return this.player.leagues.standard ? this.player.leagues.standard : "-";
     },
   },
 };
